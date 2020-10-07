@@ -1,0 +1,13 @@
+#shapesNum, #shapesArea {
+    display: inline-block;
+    width: 128px;
+}
+
+#shapesPerSec {
+    margin-right: 32px;
+}
+
+#shapesPerSecInput, #gravityInput {
+    display: inline-block;
+    width: 80px;
+}
