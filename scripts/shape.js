@@ -1,12 +1,54 @@
+const shapeVertices = [
+    [
+         0, -32,
+         32, 32,
+        -32, 32
+    ], [
+        -32, -32,
+         32, -32,
+         32,  32,
+        -32,  32,
+    ], [
+         0,  -32,
+        -30, -10,
+        -19,  26,
+         19,  26,
+         30, -10,
+    ], [
+         16, -28,
+        -16, -28,
+        -32,  0,
+        -16,  28,
+         16,  28,
+         32,  0,
+    ],
+];
+
 class Shape {
-    constructor(x, y, color, verticesArr) {
+    constructor(x, y) {
         this.shape = new PIXI.Graphics();
+
+        this.shape.x = x;
+        this.shape.y = y;
+    }
+}
+
+class Polygon extends Shape {
+    constructor(x, y, color, verticesArr) {
+        super(x, y);
         
         this.shape.beginFill(color);
         this.shape.drawPolygon(verticesArr);
         this.shape.endFill();
+    }
+}
 
-        this.shape.x = x;
-        this.shape.y = y;
+class Ellipse extends Shape{
+    constructor(x, y, color, sizeX, sizeY) {
+        super(x, y);
+        
+        this.shape.beginFill(color);
+        ellipse.drawEllipse(0, 0, sizeX, sizeY);
+        this.shape.endFill();
     }
 }

@@ -4,12 +4,8 @@ function main() {
     
     //Add the canvas that Pixi automatically created for you to the HTML document
     document.body.appendChild(app.view);
-
-    let triangle = new Shape(180, 22, 0x66FF33, [
-        -32, 64,             //First point
-        32, 64,              //Second point
-        0, 0                 //Third point
-    ]);
+    
+    let triangle = new Polygon(64,64, 0x66FF33, shapeVertices[3]);
     
     app.stage.addChild(triangle.shape);
 }
