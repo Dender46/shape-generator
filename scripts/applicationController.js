@@ -4,6 +4,9 @@ class ApplicationController {
         this.view = view;
 
         this.view.app.ticker.add(delta => this.gameLoop(delta));
+        
+        this.generateShape = this.generateShape.bind(this);
+        setTimeout(this.generateShape, 1000 / this.view.shapesPerSecond);
     }
     
     gameLoop(delta) {
@@ -16,10 +19,23 @@ class ApplicationController {
         });
     }
 
+    generateShape() {
+        let x = Math.random() * this.view.width;
+        let y = -64;
+        let color = '0x' + Math.floor(Math.random()*16777215).toString(16);
+        let vertices = shapeVertices[Math.floor(Math.random() * Math.floor(shapeVertices.length))];
+        let shape = new Polygon(x, y, color, vertices);
+
+        this.addShape(shape);
+        setTimeout(this.generateShape, 1000 / this.view.shapesPerSecond);
+        console.log('as', 1000 / this.view.shapesPerSecond);
+    }
+
     addShape(shape) {
         this.model.addShape(shape);
         this.view.stage.addChild(shape.shape);
-        shape.shape.on('pointerup', (fn) => this.deleteShape(shape));
+
+        shape.shape.on('pointerdown', (fn) => this.deleteShape(shape));
     }
 
     deleteShape(shape) {

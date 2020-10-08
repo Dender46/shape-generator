@@ -9,7 +9,7 @@ class ApplicationView {
         this.numberOfShapes = document.getElementById('shapesNum');
         this.shapesArea = document.getElementById('shapesArea');
 
-        this.shapesPerSecond = document.getElementById('shapesPerSecondInput');
+        this.shapesPerSecondInput = document.getElementById('shapesPerSecondInput');
         this.shapesPerSecondBttns = {
             '+': document.getElementById('sps+'),
             '-': document.getElementById('sps-'),
@@ -24,6 +24,10 @@ class ApplicationView {
 
     get gravity() {
         return Number(this.gravityInput.value);
+    }
+
+    get shapesPerSecond() {
+        return Number(this.shapesPerSecondInput.value);
     }
 
     get view() {

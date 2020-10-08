@@ -9,7 +9,6 @@ class ShapeModel {
 
     deleteShape(shape) {
         this.shapes.splice(this.shapes.findIndex(sh => sh == shape), 1);
-        console.log('Deleted shape ', shape);
     }
 
 }

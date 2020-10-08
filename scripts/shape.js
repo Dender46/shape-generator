@@ -47,7 +47,7 @@ class Shape {
 class Polygon extends Shape {
     constructor(x, y, color, verticesArr) {
         // coordinates of vertices originally are in the center of shape
-        verticesArr.forEach((e,i,a) => a[i] += 32);
+        verticesArr = verticesArr.map(e => e + 32);
 
         super(x, y);
         
