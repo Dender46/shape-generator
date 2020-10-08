@@ -3,6 +3,9 @@ class ApplicationView {
         this.app = new PIXI.Application(appProps);
         document.getElementById('shapesInfo').after(this.app.view);
 
+        this.width = appProps.width;
+        this.height = appProps.height;
+
         this.numberOfShapes = document.getElementById('shapesNum');
         this.shapesArea = document.getElementById('shapesArea');
 
