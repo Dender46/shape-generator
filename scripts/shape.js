@@ -31,6 +31,22 @@ class Shape {
         this.shape.x = x;
         this.shape.y = y;
     }
+
+    get y() {
+        return this.shape.y;
+    }
+
+    get x() {
+        return this.shape.x;
+    }
+
+    set y(val) {
+        this.shape.y = val;
+    }
+
+    set x(val) {
+        this.shape.x = val;
+    }
 }
 
 class Polygon extends Shape {

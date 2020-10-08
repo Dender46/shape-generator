@@ -1,7 +1,7 @@
 class ApplicationView {
     constructor(appProps) {
         this.app = new PIXI.Application(appProps);
-        document.body.appendChild(this.app.view);
+        document.getElementById('shapesInfo').after(this.app.view);
 
         this.numberOfShapes = document.getElementById('shapesNum');
         this.shapesArea = document.getElementById('shapesArea');
@@ -12,11 +12,15 @@ class ApplicationView {
             '-': document.getElementById('sps-'),
         };
 
-        this.gravity = document.getElementById('gravityInput');
+        this.gravityInput = document.getElementById('gravityInput');
         this.gravityBttns = {
             '+': document.getElementById('g+'),
             '-': document.getElementById('g-'),
         };
+    }
+
+    get gravity() {
+        return Number(this.gravityInput.value);
     }
 
     get view() {
