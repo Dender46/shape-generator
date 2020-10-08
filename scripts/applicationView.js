@@ -10,15 +10,21 @@ class ApplicationView {
         this.shapesArea = document.getElementById('shapesArea');
 
         this.shapesPerSecondInput = document.getElementById('shapesPerSecondInput');
+        this.shapesPerSecondInput.onkeydown = this.handleInputChanges;
+        this.shapesPerSecondInput.onkeyup = this.handleInputChanges;
+        this.shapesPerSecondInput.onchange = this.handleInputChanges;
         this.shapesPerSecondBttns = {
             '+': document.getElementById('sps+'),
             '-': document.getElementById('sps-'),
         };
-        this.shapesPerSecondBttns['+'].onclick = () => this.shapesPerSecondInput.value = Math.max(0.0, (this.shapesPerSecond + 1));
-        this.shapesPerSecondBttns['-'].onclick = () => this.shapesPerSecondInput.value = Math.max(0.0, (this.shapesPerSecond - 1));
+        this.shapesPerSecondBttns['+'].onclick = () => this.shapesPerSecondInput.value = Math.max(1.0, (this.shapesPerSecond + 1));
+        this.shapesPerSecondBttns['-'].onclick = () => this.shapesPerSecondInput.value = Math.max(1.0, (this.shapesPerSecond - 1));
 
         
         this.gravityInput = document.getElementById('gravityInput');
+        this.gravityInput.onkeydown = this.handleInputChanges;
+        this.gravityInput.onkeyup = this.handleInputChanges;
+        this.gravityInput.onchange = this.handleInputChanges;
         this.gravityBttns = {
             '+': document.getElementById('g+'),
             '-': document.getElementById('g-'),
@@ -41,5 +47,14 @@ class ApplicationView {
 
     get stage() {
         return this.app.stage;
+    }
+
+    handleInputChanges(e) {
+        if (isNaN(Number(e.key))) {
+            e.stopImmediatePropagation();
+            return;
+        }
+        
+        e.currentTarget.value = Math.max(0.0, e.currentTarget.value);
     }
 }

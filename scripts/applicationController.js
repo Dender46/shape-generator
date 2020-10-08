@@ -13,6 +13,8 @@ class ApplicationController {
     
     gameLoop(delta) {
         this.model.shapes.forEach((e, i, a) => {
+            this.view.numberOfShapes.textContent = this.model.shapes.length;
+
             a[i].time += delta;
             a[i].y += this.view.gravity * a[i].time;
             
@@ -30,7 +32,6 @@ class ApplicationController {
 
         this.addShape(shape);
         setTimeout(this.generateShape, 1000 / this.view.shapesPerSecond);
-        console.log('as', 1000 / this.view.shapesPerSecond);
     }
 
     addShape(shape) {
