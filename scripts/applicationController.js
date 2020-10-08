@@ -3,10 +3,12 @@ class ApplicationController {
         this.model = model;
         this.view = view;
 
-        this.view.app.ticker.add(delta => this.gameLoop(delta));
-        
+        // Shape generation
         this.generateShape = this.generateShape.bind(this);
         setTimeout(this.generateShape, 1000 / this.view.shapesPerSecond);
+
+        // Main loop
+        this.view.app.ticker.add(delta => this.gameLoop(delta));
     }
     
     gameLoop(delta) {

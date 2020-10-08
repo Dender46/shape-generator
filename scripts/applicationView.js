@@ -14,12 +14,17 @@ class ApplicationView {
             '+': document.getElementById('sps+'),
             '-': document.getElementById('sps-'),
         };
+        this.shapesPerSecondBttns['+'].onclick = () => this.shapesPerSecondInput.value = Math.max(0.0, (this.shapesPerSecond + 1));
+        this.shapesPerSecondBttns['-'].onclick = () => this.shapesPerSecondInput.value = Math.max(0.0, (this.shapesPerSecond - 1));
 
+        
         this.gravityInput = document.getElementById('gravityInput');
         this.gravityBttns = {
             '+': document.getElementById('g+'),
             '-': document.getElementById('g-'),
         };
+        this.gravityBttns['+'].onclick = () => this.gravityInput.value = Math.max(0.0, (this.gravity + 0.01).toPrecision(2));
+        this.gravityBttns['-'].onclick = () => this.gravityInput.value = Math.max(0.0, (this.gravity - 0.01).toPrecision(2));
     }
 
     get gravity() {
