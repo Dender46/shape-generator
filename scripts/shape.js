@@ -45,17 +45,18 @@ class Shape {
 }
 
 class Polygon extends Shape {
-    constructor(x, y, color, verticesArr) {
-        // coordinates of vertices originally are in the center of shape
-        verticesArr = verticesArr.map(e => e + 32);
+    constructor(props) {
+        // coordinates of vertices originallprops.y are in the center of shape
+        props.vertices = props.vertices.map(e => e + 32);
+        props.vertices = props.vertices.map(e => e * props.size);
 
-        super(x, y);
+        super(props.x, props.y);
         
-        this.shape.beginFill(color);
-        this.shape.drawPolygon(verticesArr);
+        this.shape.beginFill(props.color);
+        this.shape.drawPolygon(props.vertices);
         this.shape.endFill();
 
-        this.shape.hitArea = new PIXI.Polygon(verticesArr);
+        this.shape.hitArea = new PIXI.Polygon(props.vertices);
 
         this.time = 0;
     }
