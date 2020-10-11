@@ -11,12 +11,22 @@ class ApplicationController {
 
         // Shape generation
         this.generateShape = this.generateShape.bind(this);
-        setTimeout(this.generateShape, 1000 / this.view.shapesPerSecond);
+        this.calcShapesArea = this.calcShapesArea.bind(this);
+        setTimeout(this.generateShape, 500);
+        setTimeout(this.calcShapesArea, 1);
         
         // Main loop
         this.view.app.ticker.add(delta => this.gameLoop(delta));
     }
     
+    calcShapesArea() {
+        let canvasTexture = this.view.canvasTexture;
+        let allPixels = this.view.app.renderer.plugins.extract.pixels(canvasTexture);
+        canvasTexture.destroy(true);
+        this.view.shapesArea.textContent = Math.floor(allPixels.filter(el => el != 0).length / 4);
+        setTimeout(this.calcShapesArea, 50);
+    }
+
     gameLoop(delta) {
         this.view.numberOfShapes.textContent = this.model.shapes.length;
 

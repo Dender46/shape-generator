@@ -49,6 +49,12 @@ class ApplicationView {
         return this.app.stage;
     }
 
+    // WARNING: Returned textured must be deleted after being used to avoid memory leaks
+    get canvasTexture() {
+        let texture = this.app.renderer.generateTexture(this.stage, undefined, undefined, this.app.screen);
+        return texture;
+    }
+
     handleInputChanges(e) {
         if (isNaN(Number(e.key))) {
             e.stopImmediatePropagation();
