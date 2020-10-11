@@ -3,11 +3,11 @@
     width: 128px;
 }
 
-#shapesPerSec {
+#shapesPerSecondInput {
     margin-right: 32px;
 }
 
-#shapesPerSecInput, #gravityInput {
+#shapesPerSecondInput, #gravityInput {
     display: inline-block;
     width: 80px;
 }
