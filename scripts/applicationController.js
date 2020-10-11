@@ -6,15 +6,17 @@ class ApplicationController {
         // This is used to not spawn shape immediately when clicking on other shape
         this.justDeletedShape = false;
 
-        this.generateShapeOnClick = this.generateShapeOnClick.bind(this);
-        this.view.view.onclick = this.generateShapeOnClick;
-
         this.generateShape = this.generateShape.bind(this);
         this.calcShapesArea = this.calcShapesArea.bind(this);
-         // start loops
+        this.generateShapeOnClick = this.generateShapeOnClick.bind(this);
+        this._checkHitAreaOfWeirdShape = this._checkHitAreaOfWeirdShape.bind(this);
+
+        // start loops
         this.generateShape();
         this.calcShapesArea();
         
+        this.view.view.onclick = this.generateShapeOnClick;
+
         // Main loop
         this.view.app.ticker.add(delta => this.gameLoop(delta));
     }
@@ -48,35 +50,21 @@ class ApplicationController {
             this.justDeletedShape = false;
             return;
         }
+        let shape = this._getRandomShape();
         
         // Get x,y relative to canvas position
         let rect = e.currentTarget.getBoundingClientRect();
-        
-        let size = 0.5 + Math.random() * 1.75;
-        let shape = new Polygon({
-            x: e.clientX - rect.left,
-            y: e.clientY - rect.top,
-            size: size,
-            rotation: 0.5 + Math.random() * 5.75,
-            color: '0x' + Math.floor(Math.random()*16777215).toString(16),
-            vertices: shapeVertices[Math.floor(Math.random() * Math.floor(shapeVertices.length))]
-        });
+        shape.x = e.clientX - rect.left;
+        shape.y = e.clientY - rect.top;
         this.addShape(shape);
     }
 
     generateShape() {
-        let shape = new Polygon({
-            x: 0, 
-            y: 0,
-            size: 0.5 + Math.random() * 1.75,
-            rotation: 0.5 + Math.random() * 1.75,
-            color: '0x' + Math.floor(Math.random()*16777215).toString(16),
-            vertices: shapeVertices[Math.floor(Math.random() * Math.floor(shapeVertices.length))]
-        });
+        let shape = this._getRandomShape();
 
-        this.addShape(shape);
         shape.x = Math.random() * this.view.width;
         shape.y = -shape.height;
+        this.addShape(shape);
         
         setTimeout(this.generateShape, 1000 / this.view.shapesPerSecond);
     }
@@ -86,6 +74,9 @@ class ApplicationController {
         this.view.stage.addChild(shape.shape);
 
         shape.shape.on('pointerdown', (e) => {
+            if (shape instanceof WeirdShape && !this._checkHitAreaOfWeirdShape(shape, e.data.global.x, e.data.global.y))
+                return;
+            
             e.stopPropagation();
             this.deleteShape(shape);
             this.justDeletedShape = true;
@@ -95,5 +86,51 @@ class ApplicationController {
     deleteShape(shape) {
         this.model.deleteShape(shape);
         this.view.stage.removeChild(shape.shape);
+    }
+    
+    // because weird 
+    _checkHitAreaOfWeirdShape(shape, x, y) {
+        let rect = shape.shape.getLocalBounds();
+        x = Math.floor(x - rect.x - shape.x - 1);
+        y = Math.floor(y - rect.y - shape.y - 1);
+
+        let width = Math.floor(rect.width);
+        let texture = this.view.app.renderer.generateTexture(shape.shape, undefined, undefined, shape.shape.getBounds());
+        let pixels = this.view.app.renderer.plugins.extract.pixels(texture);
+
+        return pixels[y * (width * 4) + x * 4] == PIXI.utils.hex2rgb(shape.color)[0]*255;
+    }
+
+    _getRandomShape() {
+        let shape = null;
+        let shapeProps = {
+            x: 0, 
+            y: 0,
+            rotation: 0.5 + Math.random() * 1.75,
+            color: '0x' + Math.floor(Math.random()*16777215).toString(16)
+        };
+
+        // figuring out what next shape should be generated: polygonal, elipse or cirlce
+        let whatShapeToGen = Math.floor(Math.random() * Math.floor(shapeVertices.length + 3));
+        if (whatShapeToGen == shapeVertices.length) {
+             // generate circle
+            shapeProps.sizeX = shapeProps.sizeY = Math.random() * 16 + 36
+            shape = new Ellipse(shapeProps);
+        } else if (whatShapeToGen == shapeVertices.length + 1) {
+             // generate ellipse
+            shapeProps.sizeX = Math.random() * 16 + 24;
+            shapeProps.sizeY = Math.random() * 16 + 46;
+            shape = new Ellipse(shapeProps);
+        } else if (whatShapeToGen == shapeVertices.length + 2) {
+            // generate weird shape
+            shapeProps.rotation = 0;
+            shape = new WeirdShape(shapeProps);
+        } else {
+            shapeProps.vertices = shapeVertices[whatShapeToGen];
+            shapeProps.size = 0.5 + Math.random() * 1.75;
+            shape = new Polygon(shapeProps);
+        }
+
+        return shape;
     }
 }
