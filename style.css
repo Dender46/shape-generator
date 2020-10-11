@@ -1,6 +1,20 @@
+#shapesInfo {
+    margin: 10px;
+}
+
 #shapesNum, #shapesArea {
     display: inline-block;
-    width: 128px;
+    width: 125px;
+}
+
+.inputBlock {
+    display: inline-block;
+    margin: 10px 60px 0 10px;
+}
+
+.inputDesc {
+    display: block;
+    margin-bottom: 10px;
 }
 
 #shapesPerSecondInput {

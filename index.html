@@ -16,20 +16,25 @@
 <body>
 
     <div id="shapesInfo">
+        <span id="shapesNumDesc">Number of shapes: </span>
         <span id="shapesNum">0</span>
+
+        <span id="shapesAreaDesc">Area occupied by shapes (in px^2): </span>
         <span id="shapesArea">0</span>
     </div>
     <br>
-    <span id="shapesPerSecond">
+    <div class="inputBlock">
+        <div class="inputDesc">Number of shapes per second</div>
         <button id="sps-"> - </button>
         <button id="sps+"> + </button>
         <input type="number" min="1" name="shapesPerSecond" id="shapesPerSecondInput" value="1">
-    </span>
-    <span id="gravity">
+    </div>
+    <div class="inputBlock">
+        <div class="inputDesc">Value of gravity</div>
         <button id="g-"> - </button>
         <button id="g+"> + </button>
         <input type="number" min="0" step="0.01" name="gravity" id="gravityInput" value="0.07">
-    </span>
+    </div>
 
     <script src="scripts/script.js"></script>
 </body>
