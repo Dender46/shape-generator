@@ -25,17 +25,18 @@ const shapeVertices = [
 ];
 
 class Shape {
-    constructor(x, y) {
+    constructor(x = 0, y = 0, rotation = 0) {
         this.shape = new PIXI.Graphics();
         this.shape.interactive = true;
         this.shape.buttonMode = true;
 
         this.shape.x = x;
         this.shape.y = y;
+        this.shape.rotation = rotation;
     }
 
-    get width() {return this.shape.width;}
-    get height() {return this.shape.height;}
+    get width() {return this.shape.getBounds().width;}
+    get height() {return this.shape.getBounds().height;}
 
     get y() {return this.shape.y;}
     get x() {return this.shape.x;}
@@ -46,11 +47,9 @@ class Shape {
 
 class Polygon extends Shape {
     constructor(props) {
-        // coordinates of vertices originallprops.y are in the center of shape
-        props.vertices = props.vertices.map(e => e + 32);
         props.vertices = props.vertices.map(e => e * props.size);
 
-        super(props.x, props.y);
+        super(props.x, props.y, props.rotation);
         
         this.shape.beginFill(props.color);
         this.shape.drawPolygon(props.vertices);

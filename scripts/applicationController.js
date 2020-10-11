@@ -24,7 +24,7 @@ class ApplicationController {
             a[i].time += delta;
             a[i].y += this.view.gravity * a[i].time;
             
-            if (a[i].y > this.view.height)
+            if (a[i].y - a[i].height > this.view.height)
                 this.deleteShape(a[i]);
         });
     }
@@ -39,9 +39,10 @@ class ApplicationController {
         
         let size = 0.5 + Math.random() * 1.75;
         let shape = new Polygon({
-            x: e.clientX - rect.left - 32 * size,
-            y: e.clientY - rect.top - 32 * size,
+            x: e.clientX - rect.left,
+            y: e.clientY - rect.top,
             size: size,
+            rotation: 0.5 + Math.random() * 5.75,
             color: '0x' + Math.floor(Math.random()*16777215).toString(16),
             vertices: shapeVertices[Math.floor(Math.random() * Math.floor(shapeVertices.length))]
         });
@@ -50,14 +51,18 @@ class ApplicationController {
 
     generateShape() {
         let shape = new Polygon({
-            x: Math.random() * this.view.width, 
-            y: -128,
+            x: 0, 
+            y: 0,
             size: 0.5 + Math.random() * 1.75,
+            rotation: 0.5 + Math.random() * 1.75,
             color: '0x' + Math.floor(Math.random()*16777215).toString(16),
             vertices: shapeVertices[Math.floor(Math.random() * Math.floor(shapeVertices.length))]
         });
 
         this.addShape(shape);
+        shape.x = Math.random() * this.view.width;
+        shape.y = -shape.height;
+        
         setTimeout(this.generateShape, 1000 / this.view.shapesPerSecond);
     }
 
@@ -66,6 +71,7 @@ class ApplicationController {
         this.view.stage.addChild(shape.shape);
 
         shape.shape.on('pointerdown', (e) => {
+            e.stopPropagation();
             this.deleteShape(shape);
             this.justDeletedShape = true;
         });
