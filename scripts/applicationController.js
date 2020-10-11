@@ -9,20 +9,23 @@ class ApplicationController {
         this.generateShapeOnClick = this.generateShapeOnClick.bind(this);
         this.view.view.onclick = this.generateShapeOnClick;
 
-        // Shape generation
         this.generateShape = this.generateShape.bind(this);
         this.calcShapesArea = this.calcShapesArea.bind(this);
-        setTimeout(this.generateShape, 500);
-        setTimeout(this.calcShapesArea, 1);
+         // start loops
+        this.generateShape();
+        this.calcShapesArea();
         
         // Main loop
         this.view.app.ticker.add(delta => this.gameLoop(delta));
     }
     
     calcShapesArea() {
+        // Get texture of rendered area and all pixels of it in 1-dimensional array
         let canvasTexture = this.view.canvasTexture;
         let allPixels = this.view.app.renderer.plugins.extract.pixels(canvasTexture);
-        canvasTexture.destroy(true);
+        canvasTexture.destroy(true); // required to prevent memory leaks
+
+        // divide value by 4 because allPixels == 4 * width * height
         this.view.shapesArea.textContent = Math.floor(allPixels.filter(el => el != 0).length / 4);
         setTimeout(this.calcShapesArea, 50);
     }
@@ -40,11 +43,13 @@ class ApplicationController {
     }
 
     generateShapeOnClick(e) {
+        // Checker to prevent spawning shape immediately when clicking on other shape
         if (this.justDeletedShape) {
             this.justDeletedShape = false;
             return;
         }
         
+        // Get x,y relative to canvas position
         let rect = e.currentTarget.getBoundingClientRect();
         
         let size = 0.5 + Math.random() * 1.75;
