@@ -7,6 +7,10 @@
     width: 125px;
 }
 
+canvas {
+    display: block;
+}
+
 .inputBlock {
     display: inline-block;
     margin: 10px 60px 0 10px;
