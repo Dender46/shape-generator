@@ -12,8 +12,10 @@ class ApplicationController {
         this._checkHitAreaOfWeirdShape = this._checkHitAreaOfWeirdShape.bind(this);
 
         // start loops to generate shapes per sec. and calculate area of shapes 
-        this.generateShape();
-        this.calcShapesArea();
+        this._generateShapeStart;
+        this._calcShapesAreaStart;
+        window.requestAnimationFrame(this.generateShape);
+        window.requestAnimationFrame(this.calcShapesArea);
         
         this.view.view.onclick = this.generateShapeOnClick;
 
@@ -21,7 +23,33 @@ class ApplicationController {
         this.view.app.ticker.add(delta => this.gameLoop(delta));
     }
     
-    calcShapesArea() {
+    generateShape(timestamp) {
+        if (this._generateShapeStart == undefined)
+            this._generateShapeStart = timestamp;
+        const elapsed = timestamp - this._generateShapeStart;
+        if (elapsed < 1000 / this.view.shapesPerSecond) {
+            window.requestAnimationFrame(this.generateShape);
+            return;
+        }
+
+        let shape = this._getRandomShape();
+        shape.x = Math.random() * this.view.width;
+        shape.y = -shape.height;
+        this.addShape(shape);
+        
+        this._generateShapeStart = timestamp;
+        window.requestAnimationFrame(this.generateShape);
+    }
+
+    calcShapesArea(timestamp) {
+        if (this._calcShapesAreaStart == undefined)
+            this._calcShapesAreaStart = timestamp;
+        const elapsed = timestamp - this._calcShapesAreaStart;
+        if (elapsed < 50) {
+            window.requestAnimationFrame(this.calcShapesArea);
+            return;
+        }
+
         // Get texture of rendered area and all pixels of it in 1-dimensional array
         let canvasTexture = this.view.canvasTexture;
         let allPixels = this.view.app.renderer.plugins.extract.pixels(canvasTexture);
@@ -29,18 +57,20 @@ class ApplicationController {
 
         // divide value by 4 because allPixels == 4 * width * height
         this.view.shapesArea.textContent = Math.floor(allPixels.filter(el => el > 0).length / 4);
-        setTimeout(this.calcShapesArea, 50);
+
+        this._calcShapesAreaStart = timestamp;
+        window.requestAnimationFrame(this.calcShapesArea);
     }
 
     gameLoop(delta) {
         this.view.numberOfShapes.textContent = this.model.shapes.length;
 
-        this.model.shapes.forEach((e, i, a) => {
-            a[i].time += delta;
-            a[i].y += this.view.gravity * a[i].time;
+        this.model.shapes.forEach((element, index, array) => {
+            array[index].time += delta;
+            array[index].y += this.view.gravity * array[index].time;
             
-            if (a[i].y - a[i].height > this.view.height)
-                this.deleteShape(a[i]);
+            if (array[index].y - array[index].height > this.view.height)
+                this.deleteShape(array[index]);
         });
     }
 
@@ -57,16 +87,6 @@ class ApplicationController {
         shape.x = e.clientX - rect.left;
         shape.y = e.clientY - rect.top;
         this.addShape(shape);
-    }
-
-    generateShape() {
-        let shape = this._getRandomShape();
-
-        shape.x = Math.random() * this.view.width;
-        shape.y = -shape.height;
-        this.addShape(shape);
-        
-        setTimeout(this.generateShape, 1000 / this.view.shapesPerSecond);
     }
 
     addShape(shape) {
