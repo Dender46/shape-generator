@@ -6,11 +6,6 @@ class ApplicationController {
         // This is used to not spawn shape immediately after clicking on other shape
         this.justDeletedShape = false;
 
-        this.generateShape = this.generateShape.bind(this);
-        this.calcShapesArea = this.calcShapesArea.bind(this);
-        this.generateShapeOnClick = this.generateShapeOnClick.bind(this);
-        this._checkHitAreaOfWeirdShape = this._checkHitAreaOfWeirdShape.bind(this);
-
         // start loops to generate shapes per sec. and calculate area of shapes 
         this._generateShapeStart;
         this._calcShapesAreaStart;
@@ -23,7 +18,7 @@ class ApplicationController {
         this.view.app.ticker.add(delta => this.gameLoop(delta));
     }
     
-    generateShape(timestamp) {
+    generateShape = (timestamp) => {
         if (this._generateShapeStart == undefined)
             this._generateShapeStart = timestamp;
         const elapsed = timestamp - this._generateShapeStart;
@@ -41,7 +36,7 @@ class ApplicationController {
         window.requestAnimationFrame(this.generateShape);
     }
 
-    calcShapesArea(timestamp) {
+    calcShapesArea = (timestamp) => {
         if (this._calcShapesAreaStart == undefined)
             this._calcShapesAreaStart = timestamp;
         const elapsed = timestamp - this._calcShapesAreaStart;
@@ -74,7 +69,7 @@ class ApplicationController {
         });
     }
 
-    generateShapeOnClick(e) {
+    generateShapeOnClick = (e) => {
         // Checker to prevent spawning shape immediately after clicking on other shape
         if (this.justDeletedShape) {
             this.justDeletedShape = false;
@@ -109,7 +104,7 @@ class ApplicationController {
     }
     
     // because weird shapes don't have correct hitArea (it's basically a rectangle)
-    _checkHitAreaOfWeirdShape(shape, x, y) {
+    _checkHitAreaOfWeirdShape = (shape, x, y) => {
         let rect = shape.shape.getLocalBounds();
         x = Math.floor(x - rect.x - shape.x - 1);
         y = Math.floor(y - rect.y - shape.y - 1);
