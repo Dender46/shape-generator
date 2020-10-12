@@ -8,7 +8,9 @@ class ShapeModel {
     }
 
     deleteShape(shape) {
-        this.shapes.splice(this.shapes.findIndex(sh => sh == shape), 1);
+        let index = this.shapes.findIndex(sh => sh == shape);
+        this.shapes[index].shape.destroy();
+        PIXI.utils.removeItems(this.shapes, index, 1);
     }
 
 }

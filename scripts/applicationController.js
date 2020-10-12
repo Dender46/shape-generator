@@ -3,7 +3,7 @@ class ApplicationController {
         this.model = model;
         this.view = view;
 
-        // This is used to not spawn shape immediately when clicking on other shape
+        // This is used to not spawn shape immediately after clicking on other shape
         this.justDeletedShape = false;
 
         this.generateShape = this.generateShape.bind(this);
@@ -11,7 +11,7 @@ class ApplicationController {
         this.generateShapeOnClick = this.generateShapeOnClick.bind(this);
         this._checkHitAreaOfWeirdShape = this._checkHitAreaOfWeirdShape.bind(this);
 
-        // start loops
+        // start loops to generate shapes per sec. and calculate area of shapes 
         this.generateShape();
         this.calcShapesArea();
         
@@ -28,7 +28,7 @@ class ApplicationController {
         canvasTexture.destroy(true); // required to prevent memory leaks
 
         // divide value by 4 because allPixels == 4 * width * height
-        this.view.shapesArea.textContent = Math.floor(allPixels.filter(el => el != 0).length / 4);
+        this.view.shapesArea.textContent = Math.floor(allPixels.filter(el => el > 0).length / 4);
         setTimeout(this.calcShapesArea, 50);
     }
 
@@ -45,7 +45,7 @@ class ApplicationController {
     }
 
     generateShapeOnClick(e) {
-        // Checker to prevent spawning shape immediately when clicking on other shape
+        // Checker to prevent spawning shape immediately after clicking on other shape
         if (this.justDeletedShape) {
             this.justDeletedShape = false;
             return;
@@ -84,11 +84,11 @@ class ApplicationController {
     }
 
     deleteShape(shape) {
-        this.model.deleteShape(shape);
         this.view.stage.removeChild(shape.shape);
+        this.model.deleteShape(shape);
     }
     
-    // because weird 
+    // because weird shapes don't have correct hitArea (it's basically a rectangle)
     _checkHitAreaOfWeirdShape(shape, x, y) {
         let rect = shape.shape.getLocalBounds();
         x = Math.floor(x - rect.x - shape.x - 1);
@@ -97,6 +97,7 @@ class ApplicationController {
         let width = Math.floor(rect.width);
         let texture = this.view.app.renderer.generateTexture(shape.shape, undefined, undefined, shape.shape.getBounds());
         let pixels = this.view.app.renderer.plugins.extract.pixels(texture);
+        texture.destroy(true);
 
         return pixels[y * (width * 4) + x * 4] == PIXI.utils.hex2rgb(shape.color)[0]*255;
     }
@@ -110,7 +111,7 @@ class ApplicationController {
             color: '0x' + Math.floor(Math.random()*16777215).toString(16)
         };
 
-        // figuring out what next shape should be generated: polygonal, elipse or cirlce
+        // figuring out what next shape should be generated: polygonal, elipse, cirlce, weird one
         let whatShapeToGen = Math.floor(Math.random() * Math.floor(shapeVertices.length + 3));
         if (whatShapeToGen == shapeVertices.length) {
              // generate circle
@@ -126,6 +127,7 @@ class ApplicationController {
             shapeProps.rotation = 0;
             shape = new WeirdShape(shapeProps);
         } else {
+            // generate polygonal shape
             shapeProps.vertices = shapeVertices[whatShapeToGen];
             shapeProps.size = 0.5 + Math.random() * 1.75;
             shape = new Polygon(shapeProps);
