@@ -15,6 +15,10 @@ class Shape {
         this.shape.tint = props.color || props.tint;
     }
 
+    setRandomColor() {
+        this.color = '0x' + Math.floor(Math.random()*16777215).toString(16)
+    }
+
     get color()  {return this.shape.tint;}
     set color(t) {return this.shape.tint = t;}
 

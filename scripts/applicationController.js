@@ -103,6 +103,10 @@ class ApplicationController {
         if (shape instanceof WeirdShape && !this._checkHitAreaOfWeirdShape(shape, e.data.global.x, e.data.global.y))
             return;
         
+        this.model.shapes.get(shape.type).forEach((element, index, array) => {
+            array[index].setRandomColor();
+        });
+
         e.stopPropagation();
         this.deleteShape(shape);
         this.justDeletedShape = true;
