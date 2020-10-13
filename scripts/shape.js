@@ -12,31 +12,13 @@ class Shape {
 
         this.time = 0;
         this._type = '';
-        this._color = props.color;
-        
-        this.setColor(props.color);
+        this.shape.tint = props.color || props.tint;
     }
 
-    // Argument 'color' must be a hex number
-    setColor(color) {
-        let colorRGBArray = PIXI.utils.hex2rgb(color);
-        let colorFilter = new PIXI.filters.ColorMatrixFilter();
-        colorFilter.matrix[0]  = colorRGBArray[0];
-        colorFilter.matrix[6]  = colorRGBArray[1];
-        colorFilter.matrix[12] = colorRGBArray[2];
-        this.shape.filters = [colorFilter];
-    }
-
-    setRandomColor() {
-        let colorFilter = new PIXI.filters.ColorMatrixFilter();
-        colorFilter.matrix[0]  = Math.random() * 0.01;
-        colorFilter.matrix[6]  = Math.random() * 0.01;
-        colorFilter.matrix[12] = Math.random() * 0.01;
-        this.shape.filters = [colorFilter];
-    }
+    get color()  {return this.shape.tint;}
+    set color(t) {return this.shape.tint = t;}
 
     get type()  {return this._type;}
-    get color() {return this._color;}
     get width() {return this.shape.getBounds().width;}
     get height() {return this.shape.getBounds().height;}
 
