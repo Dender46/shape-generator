@@ -13,6 +13,26 @@ class Shape {
         this.time = 0;
         this._type = '';
         this._color = props.color;
+        
+        this.setColor(props.color);
+    }
+
+    // Argument 'color' must be a hex number
+    setColor(color) {
+        let colorRGBArray = PIXI.utils.hex2rgb(color);
+        let colorFilter = new PIXI.filters.ColorMatrixFilter();
+        colorFilter.matrix[0]  = colorRGBArray[0];
+        colorFilter.matrix[6]  = colorRGBArray[1];
+        colorFilter.matrix[12] = colorRGBArray[2];
+        this.shape.filters = [colorFilter];
+    }
+
+    setRandomColor() {
+        let colorFilter = new PIXI.filters.ColorMatrixFilter();
+        colorFilter.matrix[0]  = Math.random() * 0.01;
+        colorFilter.matrix[6]  = Math.random() * 0.01;
+        colorFilter.matrix[12] = Math.random() * 0.01;
+        this.shape.filters = [colorFilter];
     }
 
     get type()  {return this._type;}
@@ -33,7 +53,7 @@ class Polygon extends Shape {
 
         super(props);
         
-        this.shape.beginFill(props.color);
+        this.shape.beginFill(0xffffff);
         this.shape.drawPolygon(props.vertices);
         this.shape.endFill();
 
@@ -52,7 +72,7 @@ class Ellipse extends Shape {
     constructor(props) {
         super(props);
         
-        this.shape.beginFill(props.color);
+        this.shape.beginFill(0xffffff);
         this.shape.drawEllipse(0, 0, props.sizeX, props.sizeY);
         this.shape.endFill();
 
@@ -67,7 +87,7 @@ class WeirdShape extends Shape {
         props.rotation = 0;
         super(props);
         
-        this.shape.beginFill(props.color);
+        this.shape.beginFill(0xffffff);
         let max  = Math.floor(Math.random()*7+5) ;
         for (let i = 0; i < max; i++) {
             let size = Math.floor(Math.random()*55);
@@ -87,9 +107,9 @@ class WeirdShape extends Shape {
 // for debugging purposes only
 class Point extends Shape {
     constructor(x, y) {
-        super({x: x, y: y, color: '0xffffff'});
+        super({x: x, y: y, color: 0xffffff});
         
-        this.shape.beginFill('0xffffff');
+        this.shape.beginFill(0xffffff);
         this.shape.drawPolygon([-2, -2, 2, -2, 2, 2, -2,  2,]);
         this.shape.endFill();
     }
