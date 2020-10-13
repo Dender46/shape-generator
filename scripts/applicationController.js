@@ -6,11 +6,9 @@ class ApplicationController {
         // This is used to not spawn shape immediately after clicking on other shape
         this.justDeletedShape = false;
 
-        // start loops to generate shapes per sec. and calculate area of shapes 
-        this._generateShapeStart;
-        this._calcShapesAreaStart;
-        window.requestAnimationFrame(this.generateShape);
-        window.requestAnimationFrame(this.calcShapesArea);
+        // Add functions with timers
+        TimerHandler.getInstance().addTimerFunction(this.generateShape, () => 1000 / this.view.shapesPerSecond );
+        TimerHandler.getInstance().addTimerFunction(this.calcShapesArea, () => 75 );
         
         this.view.view.onclick = this.generateShapeOnClick;
 
@@ -18,33 +16,14 @@ class ApplicationController {
         this.view.app.ticker.add(delta => this.gameLoop(delta));
     }
     
-    generateShape = (timestamp) => {
-        if (this._generateShapeStart == undefined)
-            this._generateShapeStart = timestamp;
-        const elapsed = timestamp - this._generateShapeStart;
-        if (elapsed < 1000 / this.view.shapesPerSecond) {
-            window.requestAnimationFrame(this.generateShape);
-            return;
-        }
-
+    generateShape = () => {
         let shape = this._getRandomShape();
         shape.x = Math.random() * this.view.width;
         shape.y = -shape.height;
         this.addShape(shape);
-        
-        this._generateShapeStart = timestamp;
-        window.requestAnimationFrame(this.generateShape);
     }
 
-    calcShapesArea = (timestamp) => {
-        if (this._calcShapesAreaStart == undefined)
-            this._calcShapesAreaStart = timestamp;
-        const elapsed = timestamp - this._calcShapesAreaStart;
-        if (elapsed < 50) {
-            window.requestAnimationFrame(this.calcShapesArea);
-            return;
-        }
-
+    calcShapesArea = () => {
         // Get texture of rendered area and all pixels of it in 1-dimensional array
         let canvasTexture = this.view.canvasTexture;
         let allPixels = this.view.app.renderer.plugins.extract.pixels(canvasTexture);
@@ -52,9 +31,6 @@ class ApplicationController {
 
         // divide value by 4 because allPixels == 4 * width * height
         this.view.shapesArea.textContent = Math.floor(allPixels.filter(el => el > 0).length / 4);
-
-        this._calcShapesAreaStart = timestamp;
-        window.requestAnimationFrame(this.calcShapesArea);
     }
 
     gameLoop(delta) {
