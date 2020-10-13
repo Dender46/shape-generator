@@ -74,7 +74,7 @@ class ApplicationController {
     }
 
     addShape(shape) {
-        shape.shape.on('pointerdown', this.handleOnShapeClick);
+        shape.shape.on('pointerdown', (e) => this.handleOnShapeClick(e, shape));
 
         this.model.addShape(shape);
         this.view.app.stage.addChild(shape.shape);
@@ -99,7 +99,7 @@ class ApplicationController {
         return pixels[y * (width * 4) + x * 4] == PIXI.utils.hex2rgb(shape.color)[0]*255;
     }
 
-    handleOnShapeClick = (e) =>  {
+    handleOnShapeClick(e, shape) {
         if (shape instanceof WeirdShape && !this._checkHitAreaOfWeirdShape(shape, e.data.global.x, e.data.global.y))
             return;
         
