@@ -28,7 +28,7 @@ class ApplicationController {
     }
 
     generateShape = () => {
-        let shape = this._getRandomShape();
+        let shape = ShapeGenerator.getInstance().generateShape();
         shape.x = Math.random() * this.view.width;
         shape.y = -shape.height;
         this.addShape(shape);
@@ -62,7 +62,7 @@ class ApplicationController {
             this.justDeletedShape = false;
             return;
         }
-        let shape = this._getRandomShape();
+        let shape = ShapeGenerator.getInstance().generateShape();
         
         // Get x,y relative to canvas position
         let rect = e.currentTarget.getBoundingClientRect();
@@ -90,7 +90,7 @@ class ApplicationController {
         this.model.deleteShape(shape);
     }
     
-    // because weird shapes don't have correct hitArea (it's basically a rectangle)
+    // because weird shapes don't have correct hitArea (it's hitarea is basically a rectangle)
     _checkHitAreaOfWeirdShape = (shape, x, y) => {
         let rect = shape.shape.getLocalBounds();
         x = Math.floor(x - rect.x - shape.x - 1);
@@ -114,39 +114,5 @@ class ApplicationController {
         let oldValue = Number(gravityInput.value);
         let newValue = operation == '+' ? oldValue + 0.01 : oldValue - 0.01;
         gravityInput.value = Math.max(0.0, newValue.toPrecision(2));
-    }
-
-    _getRandomShape() {
-        let shape = null;
-        let shapeProps = {
-            x: 0, 
-            y: 0,
-            rotation: 0.5 + Math.random() * 1.75,
-            color: '0x' + Math.floor(Math.random()*16777215).toString(16)
-        };
-
-        // figuring out what next shape should be generated: polygonal, elipse, cirlce, weird one
-        let whatShapeToGen = Math.floor(Math.random() * Math.floor(shapeVertices.length + 3));
-        if (whatShapeToGen == shapeVertices.length) {
-             // generate circle
-            shapeProps.sizeX = shapeProps.sizeY = Math.random() * 16 + 36
-            shape = new Ellipse(shapeProps);
-        } else if (whatShapeToGen == shapeVertices.length + 1) {
-             // generate ellipse
-            shapeProps.sizeX = Math.random() * 16 + 24;
-            shapeProps.sizeY = Math.random() * 16 + 46;
-            shape = new Ellipse(shapeProps);
-        } else if (whatShapeToGen == shapeVertices.length + 2) {
-            // generate weird shape
-            shapeProps.rotation = 0;
-            shape = new WeirdShape(shapeProps);
-        } else {
-            // generate polygonal shape
-            shapeProps.vertices = shapeVertices[whatShapeToGen];
-            shapeProps.size = 0.5 + Math.random() * 1.75;
-            shape = new Polygon(shapeProps);
-        }
-
-        return shape;
     }
 }

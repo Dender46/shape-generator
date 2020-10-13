@@ -1,28 +1,4 @@
-const shapeVertices = [
-    [
-         0, -32,
-         32, 32,
-        -32, 32
-    ], [
-        -32, -32,
-         32, -32,
-         32,  32,
-        -32,  32,
-    ], [
-         0,  -32,
-        -30, -10,
-        -19,  26,
-         19,  26,
-         30, -10,
-    ], [
-         16, -28,
-        -16, -28,
-        -32,  0,
-        -16,  28,
-         16,  28,
-         32,  0,
-    ],
-];
+// File that contains all shape variations
 
 class Shape {
     constructor(props) {
@@ -95,7 +71,7 @@ class WeirdShape extends Shape {
     }
 }
 
-// for debugging
+// for debugging purposes only
 class Point extends Shape {
     constructor(x, y) {
         super({x: x, y: y, color: '0xffffff'});
