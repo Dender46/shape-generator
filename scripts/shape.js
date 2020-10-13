@@ -11,10 +11,12 @@ class Shape {
         this.shape.rotation = props.rotation || 0;
 
         this.time = 0;
-        this.props = props;
+        this._type = '';
+        this._color = props.color;
     }
 
-    get color() {return this.props.color;}
+    get type()  {return this._type;}
+    get color() {return this._color;}
     get width() {return this.shape.getBounds().width;}
     get height() {return this.shape.getBounds().height;}
 
@@ -36,6 +38,13 @@ class Polygon extends Shape {
         this.shape.endFill();
 
         this.shape.hitArea = new PIXI.Polygon(props.vertices);
+
+        switch(props.vertices.length / 2) {
+            case 3: this._type = 'polygonal3'; break;
+            case 4: this._type = 'polygonal4'; break;
+            case 5: this._type = 'polygonal5'; break;
+            case 6: this._type = 'polygonal6'; break;
+        }
     }
 }
 
@@ -48,6 +57,8 @@ class Ellipse extends Shape {
         this.shape.endFill();
 
         this.shape.hitArea = new PIXI.Ellipse(0, 0, props.sizeX, props.sizeY);
+
+        this._type = props.sizeX == props.sizeY ? 'circle' : 'ellipse';
     }
 }
 
@@ -68,6 +79,8 @@ class WeirdShape extends Shape {
 
         let bounds = this.shape.getBounds();
         this.shape.hitArea = new PIXI.Rectangle(bounds.x, bounds.y, bounds.width, bounds.height);
+
+        this._type = 'weird';
     }
 }
 

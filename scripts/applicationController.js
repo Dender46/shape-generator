@@ -45,15 +45,17 @@ class ApplicationController {
     }
 
     gameLoop(delta) {
-        this.view.numberOfShapes.textContent = this.model.shapes.length;
+        this.view.numberOfShapes.textContent = this.model.numberOfShapes;
 
-        this.model.shapes.forEach((element, index, array) => {
-            array[index].time += delta;
-            array[index].y += this.gravity * array[index].time;
-            
-            if (array[index].y - array[index].height > this.view.height)
-                this.deleteShape(array[index]);
-        });
+        for (let [key, value] of this.model.shapes.entries()) {
+            value.forEach((element, index, array) => {
+                array[index].time += delta;
+                array[index].y += this.gravity * array[index].time;
+                
+                if (array[index].y - array[index].height > this.view.height)
+                    this.deleteShape(array[index]);
+            });
+        }
     }
 
     generateShapeOnClick = (e) => {
@@ -72,17 +74,10 @@ class ApplicationController {
     }
 
     addShape(shape) {
+        shape.shape.on('pointerdown', this.handleOnShapeClick);
+
         this.model.addShape(shape);
         this.view.app.stage.addChild(shape.shape);
-
-        shape.shape.on('pointerdown', (e) => {
-            if (shape instanceof WeirdShape && !this._checkHitAreaOfWeirdShape(shape, e.data.global.x, e.data.global.y))
-                return;
-            
-            e.stopPropagation();
-            this.deleteShape(shape);
-            this.justDeletedShape = true;
-        });
     }
 
     deleteShape(shape) {
@@ -102,6 +97,15 @@ class ApplicationController {
         texture.destroy(true);
 
         return pixels[y * (width * 4) + x * 4] == PIXI.utils.hex2rgb(shape.color)[0]*255;
+    }
+
+    handleOnShapeClick = (e) =>  {
+        if (shape instanceof WeirdShape && !this._checkHitAreaOfWeirdShape(shape, e.data.global.x, e.data.global.y))
+            return;
+        
+        e.stopPropagation();
+        this.deleteShape(shape);
+        this.justDeletedShape = true;
     }
 
     handleGenerationFrequencyChange = (frequencyInput, operation) => {
