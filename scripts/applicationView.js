@@ -1,7 +1,7 @@
 class ApplicationView {
     constructor(appProps) {
         this.app = new PIXI.Application(appProps);
-        document.getElementById('shapesInfo').after(this.app.view); // add canvas inbetween shapesInfo and 
+        document.getElementById(ConstStrings.SHAPES_INFO).after(this.app.view); // add canvas inbetween shapesInfo and 
 
         // this is used to prevent text selection of "Number of shapes per second" when clicking on canvas
         this.app.view.style['-webkit-user-select'] = 'none';  /* Chrome all / Safari all */
@@ -12,19 +12,19 @@ class ApplicationView {
         this._width = appProps.width;
         this._height = appProps.height;
 
-        this.numberOfShapes = document.getElementById('shapesNum');
-        this.shapesArea = document.getElementById('shapesArea');
+        this.numberOfShapes = document.getElementById(ConstStrings.SHAPES_NUM);
+        this.shapesArea = document.getElementById(ConstStrings.SHAPES_AREA);
 
-        this.generationFrequencyInput = document.getElementById('generationFrequencyInput');
+        this.generationFrequencyInput = document.getElementById(ConstStrings.GENERATION_FREQUENCY_INPUT);
         this.generationFrequencyBttns = {
-            '+': document.getElementById('sps+'),
-            '-': document.getElementById('sps-'),
+            '+': document.getElementById(ConstStrings.GENERATION_FREQUENCY_PLUS),
+            '-': document.getElementById(ConstStrings.GENERATION_FREQUENCY_MINUS),
         };
         
-        this.gravityInput = document.getElementById('gravityInput');
+        this.gravityInput = document.getElementById(ConstStrings.GRAVITY_INPUT);
         this.gravityBttns = {
-            '+': document.getElementById('g+'),
-            '-': document.getElementById('g-'),
+            '+': document.getElementById(ConstStrings.GRAVITY_PLUS),
+            '-': document.getElementById(ConstStrings.GRAVITY_MINUS),
         };
     }
 
