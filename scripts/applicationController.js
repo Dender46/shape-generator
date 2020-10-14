@@ -116,7 +116,7 @@ class ApplicationController {
     // Callback to when mouse is clicked on shape
     handleOnShapeClick(e, shape) {
         // WeirdShapes need special case of handling 
-        if (shape instanceof WeirdShape && !this._checkHitAreaOfWeirdShape(shape, e.data.global.x, e.data.global.y))
+        if (shape.type == ShapeTypes.WEIRD_SHAPE && !this._checkHitAreaOfWeirdShape(shape, e.data.global.x, e.data.global.y))
             return;
         
         // Set random color to all shapes of similar type

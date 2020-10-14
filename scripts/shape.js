@@ -1,5 +1,16 @@
 // File that contains all shape variations
 
+class ShapeTypes {
+    static NULL         = -1;
+    static TRIANGLE     = 0;
+    static SQUARE       = 1;
+    static PENTAGON     = 2;
+    static HEXAGON      = 3;
+    static CIRCLE       = 4;
+    static ELLIPSE      = 5;
+    static WEIRD_SHAPE  = 6;
+}
+
 class Shape {
     constructor(props) {
         this.shape = new PIXI.Graphics();
@@ -12,7 +23,7 @@ class Shape {
         this.shape.rotation = props.rotation || 0;
 
         this.time = 0; // time is used for kinetic movement
-        this._type = ''; // used to map shapes inside ShapeModel based on their type
+        this._type = ShapeTypes.NULL; // used to map shapes inside ShapeModel based on their type
         this.shape.tint = props.color || props.tint;
     }
 
@@ -50,10 +61,10 @@ class Polygon extends Shape {
 
         // set type of polygon based on amount of vertices
         switch(props.vertices.length / 2) {
-            case 3: this._type = 'polygon3'; break;
-            case 4: this._type = 'polygon4'; break;
-            case 5: this._type = 'polygon5'; break;
-            case 6: this._type = 'polygon6'; break;
+            case 3: this._type = ShapeTypes.TRIANGLE; break;
+            case 4: this._type = ShapeTypes.SQUARE;   break;
+            case 5: this._type = ShapeTypes.PENTAGON; break;
+            case 6: this._type = ShapeTypes.HEXAGON;  break;
         }
     }
 }
@@ -69,7 +80,7 @@ class Ellipse extends Shape {
 
         this.shape.hitArea = new PIXI.Ellipse(0, 0, props.sizeX, props.sizeY);
 
-        this._type = props.sizeX == props.sizeY ? 'circle' : 'ellipse';
+        this._type = props.sizeX == props.sizeY ? ShapeTypes.CIRCLE : ShapeTypes.ELLIPSE;
     }
 }
 
@@ -93,7 +104,7 @@ class WeirdShape extends Shape {
         let bounds = this.shape.getBounds();
         this.shape.hitArea = new PIXI.Rectangle(bounds.x, bounds.y, bounds.width, bounds.height);
 
-        this._type = 'weird';
+        this._type = ShapeTypes.WEIRD_SHAPE;
     }
 }
 

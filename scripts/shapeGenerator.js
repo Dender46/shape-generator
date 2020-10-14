@@ -40,25 +40,29 @@ var ShapeGenerator = (function() {
         };
 
         // figuring out what next shape should be generated: polygon, elipse, cirlce, weird one
-        let whatShapeToGen = Math.floor(Math.random() * Math.floor(_shapeVertices.length + 3));
-        if (whatShapeToGen == _shapeVertices.length) {
-             // generate circle
-            shapeProps.sizeX = shapeProps.sizeY = Math.random() * 16 + 36
-            shape = new Ellipse(shapeProps);
-        } else if (whatShapeToGen == _shapeVertices.length + 1) {
-             // generate ellipse
-            shapeProps.sizeX = Math.random() * 16 + 24;
-            shapeProps.sizeY = Math.random() * 16 + 46;
-            shape = new Ellipse(shapeProps);
-        } else if (whatShapeToGen == _shapeVertices.length + 2) {
-            // generate weird shape
-            shapeProps.rotation = 0;
-            shape = new WeirdShape(shapeProps);
-        } else {
-            // generate polygon shape
-            shapeProps.vertices = _shapeVertices[whatShapeToGen];
-            shapeProps.size = 0.5 + Math.random() * 1.75;
-            shape = new Polygon(shapeProps);
+        let shapeType = Math.floor(Math.random() * Math.floor(7));
+        switch (shapeType) {
+            case ShapeTypes.TRIANGLE:
+            case ShapeTypes.SQUARE:
+            case ShapeTypes.PENTAGON:
+            case ShapeTypes.HEXAGON:
+                shapeProps.vertices = _shapeVertices[shapeType];
+                shapeProps.size = 0.5 + Math.random() * 1.75;
+                shape = new Polygon(shapeProps);
+                break;
+            case ShapeTypes.CIRCLE:
+                shapeProps.sizeX = shapeProps.sizeY = Math.random() * 16 + 36
+                shape = new Ellipse(shapeProps);
+                break;
+            case ShapeTypes.ELLIPSE:
+                shapeProps.sizeX = Math.random() * 16 + 24;
+                shapeProps.sizeY = Math.random() * 16 + 46;
+                shape = new Ellipse(shapeProps);
+                break;
+            case ShapeTypes.WEIRD_SHAPE:
+                shapeProps.rotation = 0;
+                shape = new WeirdShape(shapeProps);
+                break;
         }
 
         return shape;

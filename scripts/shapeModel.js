@@ -3,13 +3,13 @@ class ShapeModel {
         // Using Map instead of Object because it has 
         // faster adding, deleting, finding performance
         this.shapes = new Map([
-            ['polygon3', []],
-            ['polygon4', []],
-            ['polygon5', []],
-            ['polygon6', []],
-            ['circle',   []],
-            ['ellipse',  []],
-            ['weird',    []],
+            [ShapeTypes.TRIANGLE,    []],
+            [ShapeTypes.SQUARE,      []],
+            [ShapeTypes.PENTAGON,    []],
+            [ShapeTypes.HEXAGON,     []],
+            [ShapeTypes.CIRCLE,      []],
+            [ShapeTypes.ELLIPSE,     []],
+            [ShapeTypes.WEIRD_SHAPE, []],
         ]); 
         this._numberOfShapes = 0;
     }
