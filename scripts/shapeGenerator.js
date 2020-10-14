@@ -4,22 +4,22 @@ var ShapeGenerator = (function() {
     var _instance;
 
     const _shapeVertices = [
-        [
+        [// triangle
              0, -32,
              32, 32,
             -32, 32
-        ], [
+        ], [// square
             -32, -32,
              32, -32,
              32,  32,
             -32,  32,
-        ], [
+        ], [// pentagon
              0,  -32,
             -30, -10,
             -19,  26,
              19,  26,
              30, -10,
-        ], [
+        ], [// hexagon
              16, -28,
             -16, -28,
             -32,  0,
@@ -29,6 +29,7 @@ var ShapeGenerator = (function() {
         ],
     ];
 
+    // Function that returns shape with random color, size, rotation
     var generateShape = () => {
         let shape = null;
         let shapeProps = {
@@ -38,7 +39,7 @@ var ShapeGenerator = (function() {
             color: '0x' + Math.floor(Math.random()*16777215).toString(16)
         };
 
-        // figuring out what next shape should be generated: polygonal, elipse, cirlce, weird one
+        // figuring out what next shape should be generated: polygon, elipse, cirlce, weird one
         let whatShapeToGen = Math.floor(Math.random() * Math.floor(_shapeVertices.length + 3));
         if (whatShapeToGen == _shapeVertices.length) {
              // generate circle
@@ -54,7 +55,7 @@ var ShapeGenerator = (function() {
             shapeProps.rotation = 0;
             shape = new WeirdShape(shapeProps);
         } else {
-            // generate polygonal shape
+            // generate polygon shape
             shapeProps.vertices = _shapeVertices[whatShapeToGen];
             shapeProps.size = 0.5 + Math.random() * 1.75;
             shape = new Polygon(shapeProps);

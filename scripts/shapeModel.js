@@ -1,18 +1,17 @@
 class ShapeModel {
     constructor() {
-        // using Map instead of Object because it has 
+        // Using Map instead of Object because it has 
         // faster adding, deleting, finding performance
         this.shapes = new Map([
-            ['polygonal3',[]],
-            ['polygonal4',[]],
-            ['polygonal5',[]],
-            ['polygonal6',[]],
-            ['circle',    []],
-            ['ellipse',   []],
-            ['weird',     []],
-        ]);
+            ['polygon3', []],
+            ['polygon4', []],
+            ['polygon5', []],
+            ['polygon6', []],
+            ['circle',   []],
+            ['ellipse',  []],
+            ['weird',    []],
+        ]); 
         this._numberOfShapes = 0;
-        
     }
 
     get numberOfShapes() {
@@ -28,7 +27,8 @@ class ShapeModel {
         this._numberOfShapes--;
 
         let index = this.shapes.get(shape.type).findIndex(sh => sh == shape);
-        this.shapes.get(shape.type)[index].shape.destroy();
+        this.shapes.get(shape.type)[index].shape.destroy(); // clearing up to avoid memory leak
+        // PIXI.utils.removeItems is slightly better then regular Array.prototype.splice
         PIXI.utils.removeItems(this.shapes.get(shape.type), index, 1);
     }
 

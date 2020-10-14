@@ -3,6 +3,7 @@
 class Shape {
     constructor(props) {
         this.shape = new PIXI.Graphics();
+        // Set shape as clickable
         this.shape.interactive = true;
         this.shape.buttonMode = true;
 
@@ -10,13 +11,13 @@ class Shape {
         this.shape.y = props.y;
         this.shape.rotation = props.rotation || 0;
 
-        this.time = 0;
-        this._type = '';
+        this.time = 0; // time is used for kinetic movement
+        this._type = ''; // used to map shapes inside ShapeModel based on their type
         this.shape.tint = props.color || props.tint;
     }
 
     setRandomColor() {
-        this.color = '0x' + Math.floor(Math.random()*16777215).toString(16)
+        this.color = '0x' + Math.floor(Math.random()*16777215).toString(16);
     }
 
     get color()  {return this.shape.tint;}
@@ -35,6 +36,7 @@ class Shape {
 
 class Polygon extends Shape {
     constructor(props) {
+        // Change size of shape by changing vertices
         props.vertices = props.vertices.map(e => e * props.size);
 
         super(props);
@@ -43,17 +45,20 @@ class Polygon extends Shape {
         this.shape.drawPolygon(props.vertices);
         this.shape.endFill();
 
+        // hitArea is used for interactivity
         this.shape.hitArea = new PIXI.Polygon(props.vertices);
 
+        // set type of polygon based on amount of vertices
         switch(props.vertices.length / 2) {
-            case 3: this._type = 'polygonal3'; break;
-            case 4: this._type = 'polygonal4'; break;
-            case 5: this._type = 'polygonal5'; break;
-            case 6: this._type = 'polygonal6'; break;
+            case 3: this._type = 'polygon3'; break;
+            case 4: this._type = 'polygon4'; break;
+            case 5: this._type = 'polygon5'; break;
+            case 6: this._type = 'polygon6'; break;
         }
     }
 }
 
+// Ellipse class is also used to create circles
 class Ellipse extends Shape {
     constructor(props) {
         super(props);
@@ -68,6 +73,7 @@ class Ellipse extends Shape {
     }
 }
 
+// WeirdShape is shape that doesn't have any vertices and rather is a cluster of circles
 class WeirdShape extends Shape {
     constructor(props) {
         props.rotation = 0;
@@ -76,13 +82,14 @@ class WeirdShape extends Shape {
         this.shape.beginFill(0xffffff);
         let max  = Math.floor(Math.random()*7+5) ;
         for (let i = 0; i < max; i++) {
-            let size = Math.floor(Math.random()*55);
+            let size = Math.floor(Math.random()*35+20);
             let x = Math.floor(Math.random()*60-30);
             let y = Math.floor(Math.random()*60-30);
             this.shape.drawEllipse(x, y, size, size);
         }
         this.shape.endFill();
 
+        // Set hitArea as rectangle because in controller check collision is claculated better
         let bounds = this.shape.getBounds();
         this.shape.hitArea = new PIXI.Rectangle(bounds.x, bounds.y, bounds.width, bounds.height);
 
@@ -91,7 +98,7 @@ class WeirdShape extends Shape {
 }
 
 // for debugging purposes only
-class Point extends Shape {
+class DebugPoint extends Shape {
     constructor(x, y) {
         super({x: x, y: y, color: 0xffffff});
         
