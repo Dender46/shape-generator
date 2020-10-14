@@ -12,7 +12,7 @@ class ApplicationController {
         this.justDeletedShape = false;
 
         // Add functions with timers
-        TimerHandler.getInstance().addTimerFunction(this.generateShape, () => 1000 / this.shapesPerSecond );
+        TimerHandler.getInstance().addTimerFunction(this.generateShape, () => 1000 / this.generationFrequency );
         TimerHandler.getInstance().addTimerFunction(this.calcShapesArea, () => 75 );
 
         // Main loop
@@ -23,8 +23,8 @@ class ApplicationController {
         return Number(this.view.gravityInput.value);
     }
 
-    get shapesPerSecond() {
-        return Number(this.view.shapesPerSecondInput.value);
+    get generationFrequency() {
+        return Number(this.view.generationFrequencyInput.value);
     }
 
     generateShape = () => {

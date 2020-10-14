@@ -28,11 +28,11 @@ canvas {
     margin-bottom: 10px;
 }
 
-#shapesPerSecondInput {
+#generationFrequencyInput {
     margin-right: 32px;
 }
 
-#shapesPerSecondInput, #gravityInput {
+#generationFrequencyInput, #gravityInput {
     display: inline-block;
     width: 80px;
 }

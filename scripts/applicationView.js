@@ -15,8 +15,8 @@ class ApplicationView {
         this.numberOfShapes = document.getElementById('shapesNum');
         this.shapesArea = document.getElementById('shapesArea');
 
-        this.shapesPerSecondInput = document.getElementById('shapesPerSecondInput');
-        this.shapesPerSecondBttns = {
+        this.generationFrequencyInput = document.getElementById('generationFrequencyInput');
+        this.generationFrequencyBttns = {
             '+': document.getElementById('sps+'),
             '-': document.getElementById('sps-'),
         };
@@ -39,8 +39,8 @@ class ApplicationView {
     }
 
     bindShapesGenerationFrequency(handler) {
-        this.shapesPerSecondBttns['+'].onclick = (event) => handler(this.shapesPerSecondInput, '+');
-        this.shapesPerSecondBttns['-'].onclick = (event) => handler(this.shapesPerSecondInput, '-');
+        this.generationFrequencyBttns['+'].onclick = (event) => handler(this.generationFrequencyInput, '+');
+        this.generationFrequencyBttns['-'].onclick = (event) => handler(this.generationFrequencyInput, '-');
     }
 
     bindGravity(handler) {
